@@ -14,7 +14,7 @@ class Graph{
         return adjMatrix;
     }
     void printGraph(){
-        cout<<"Graph with "<<numVertices<<"vertices and "<<numEdges<<" edges."<<endl; 
+        cout<<"Graph with "<<numVertices<<" vertices and "<<numEdges<<" edges."<<endl; 
     }
     void loadGraph(vector<vector<int>> adjMatrix);
 

@@ -1,7 +1,8 @@
 /** Implementation of the Algorithm class*/
 #include "Algorithms.hpp"
+
 using namespace std;
-bool isContainsCycleUtil(ariel::Graph g, int v, vector<bool>& visited, vector<int>& parent) {
+static bool isContainsCycleUtil(ariel::Graph g, int v, vector<bool>& visited, vector<int>& parent) {
        
         visited[(size_t)v] = true; //marking the current vertex as visited
         vector<vector<int>> adjMatrix = g.getAdjMatrix();
@@ -42,7 +43,7 @@ static void DFS(ariel::Graph g, int start, vector<bool> &visited){
     }
 }
 
-static int isConnected(ariel::Graph g){ //I think it will work
+ int ariel::Algorithms::isConnected(ariel::Graph g){ //I think it will work
     vector<bool> visited(g.getAdjMatrix().size(), false);
     DFS(g, 0, visited); //runnig DFS from the first vertex
     for(size_t i=0; i<visited.size(); i++){
@@ -63,7 +64,7 @@ static int isConnected(ariel::Graph g){ //I think it will work
     return 1;
 }
 
-static string isContainsCycle(ariel::Graph g){ //running a version of DSF that will return the actual cycle
+ string ariel::Algorithms::isContainsCycle(ariel::Graph g){ //running a version of DSF that will return the actual cycle
     vector<vector<int>> adjMatrix = g.getAdjMatrix();
     vector<bool> visited(adjMatrix.size(), false);
     vector<int> parent(adjMatrix.size(), -1);
@@ -78,6 +79,71 @@ static string isContainsCycle(ariel::Graph g){ //running a version of DSF that w
                 }
                 cycle += to_string(i);
                 return cycle;
+            }
+        }
+    }
+    return "0";
+}
+
+string ariel::Algorithms::isBipartite(ariel::Graph g){
+    vector<vector<int>> adjMatrix = g.getAdjMatrix();
+    vector<int> color(adjMatrix.size(), -1); //initialize the color vector with -1
+    color[0] = 1; //color the first vertex with 1
+    queue<int> q;
+    q.push(0); //push the first vertex to the queue
+    while(!q.empty()){
+        int u = q.front();
+        q.pop();
+        for(size_t i=0; i<adjMatrix.size(); i++){
+            if(adjMatrix[(size_t)u][i] && color[i] == -1){ //if there is an edge between u and i, and i is not colored yet
+                color[i] = 1 - color[(size_t)u]; //color i with the opposite color of u
+                q.push(i); //push i to the queue
+            }
+            else if(adjMatrix[(size_t)u][i] && color[i] == color[(size_t)u]){ //if there is an edge between u and i, and they have the same color, then the graph is not bipartite
+                return "0";
+            }
+        }
+    }
+    string res = "The graph is bipartite: A={";
+    for(size_t i=0; i<color.size(); i++){
+        if(color[i] == 1){
+            res += to_string(i) + ", ";
+        }
+    }
+    res.pop_back();
+    res.pop_back();
+    res += "}, B={";
+    for(size_t i=0; i<color.size(); i++){
+        if(color[i] == 0){
+            res += to_string(i) + ", ";
+        }
+    }
+    res.pop_back();
+    res.pop_back();
+    res += "}";
+    return res;
+}
+
+string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end){
+   return "0";
+}
+string ariel::Algorithms::negativeCycle(ariel::Graph g){
+    vector<vector<int>> adjMatrix = g.getAdjMatrix();
+    vector<int> distance(adjMatrix.size(), INT_MAX);
+    distance[0] = 0;
+    for(size_t i=0; i<adjMatrix.size()-1; i++){
+        for(size_t j=0; j<adjMatrix.size(); j++){
+            for(size_t k=0; k<adjMatrix.size(); k++){
+                if(adjMatrix[j][k] && distance[j] != INT_MAX && distance[j] + adjMatrix[j][k] < distance[k]){
+                    distance[k] = distance[j] + adjMatrix[j][k];
+                }
+            }
+        }
+    }
+    for(size_t j=0; j<adjMatrix.size(); j++){
+        for(size_t k=0; k<adjMatrix.size(); k++){
+            if(adjMatrix[j][k] && distance[j] != INT_MAX && distance[j] + adjMatrix[j][k] < distance[k]){
+                return "true";
             }
         }
     }
