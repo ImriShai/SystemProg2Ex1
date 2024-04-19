@@ -41,7 +41,7 @@ TEST_CASE("Test shortestPath")
         {0, 0, 1, 0, 0},
         {0, 0, 0, 0, 0}};
     g.loadGraph(graph2);
-    CHECK(ariel::Algorithms::shortestPath(g, 0, 4) == "-1");
+    CHECK(ariel::Algorithms::shortestPath(g, 0, 4) == "There is no path between vector 0 and vector 4");
 }
 TEST_CASE("Test isContainsCycle")
 {
@@ -102,4 +102,17 @@ TEST_CASE("Test invalid graph")
         {0, 0, 4, 0},
         {0, 0, 0, 5}};
     CHECK_THROWS(g.loadGraph(graph));
+}
+TEST_CASE("Test negative cycle")
+{
+    ariel::Graph g;
+    vector<vector<int>> graph = {
+            {0, 0, 0,0},
+            {4, 0, -6,0},
+            {0, 0, 0,5},
+            {0,-2,0,0}};
+    g.loadGraph(graph);
+    CHECK(ariel::Algorithms::negativeCycle(g) == "1->2->3->1");
+
+
 }

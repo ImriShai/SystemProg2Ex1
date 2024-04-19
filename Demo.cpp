@@ -16,9 +16,9 @@ int main()
     ariel::Graph g;
     // 3x3 matrix that represents a connected graph.
     vector<vector<int>> graph = {
-        {0, 1, 0},
-        {1, 0, 1},
-        {0, 1, 0}};
+        {0, -1, 0},
+        {0, 0, 1},
+        {0, 0, 0}};
     g.loadGraph(graph); // Load the graph to the object.
 
     g.printGraph();                                    // Should print: "Graph with 3 vertices and 2 edges."
@@ -73,4 +73,12 @@ int main()
     {
         cout << e.what() << endl; // Should print: "Invalid graph: The graph is not a square matrix."
     }
+
+    vector<vector<int>> graph5 = {
+            {0, 0, 0,0},
+            {4, 0, -6,0},
+            {0, 0, 0,5},
+            {0,-2,0,0}};
+    g.loadGraph(graph5);
+    cout<<ariel::Algorithms::negativeCycle(g);//== "0->1->2->0");
 }

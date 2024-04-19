@@ -40,21 +40,21 @@ void Graph::loadGraph(vector<vector<int>> adjMatrix) {
 }
 void Graph::printGraph() {
     if (!directed&&!weighted){
-        cout<<"This is an undirected and unweighted graph with " << numVertices << " vertices and " << numEdges <<" edges"<<endl;
+        cout<<"This is a undirected and unweighted graph with " << numVertices << " vertices and " << numEdges <<" edges"<<endl;
     }
     if (!directed&&weighted&&!negative){
-        cout<<"This is an undirected weighted graph with non-negative weights,  " << numVertices << " vertices and " << numEdges <<" edges"<<endl;
+        cout<<"This is a undirected weighted graph with non-negative weights, " << numVertices << " vertices and " << numEdges <<" edges"<<endl;
     }
     if (!directed&&weighted&&negative){
-        cout<<"This is an undirected weighted graph with negative weights,  " << numVertices << " vertices and " << numEdges <<" edges"<<endl;
+        cout<<"This is a undirected weighted graph with negative weights, " << numVertices << " vertices and " << numEdges <<" edges"<<endl;
     }
     if (directed&&!weighted){
         cout<<"This is a directed and unweighted graph with " << numVertices << " vertices and " << numEdges <<" edges"<<endl;
     }
     if (directed&&weighted&&!negative){
-        cout<<"This is a directed weighted graph with non-negative weights,  " << numVertices << " vertices and " << numEdges <<" edges"<<endl;
+        cout<<"This is a directed weighted graph with non-negative weights, " << numVertices << " vertices and " << numEdges <<" edges"<<endl;
     }
     if (directed&&weighted&&negative){
-        cout<<"This is an undirected weighted graph with negative weights,  " << numVertices << " vertices and " << numEdges <<" edges"<<endl;
+        cout<<"This is a directed weighted graph with negative weights, " << numVertices << " vertices and " << numEdges <<" edges"<<endl;
     }
 }
