@@ -8,8 +8,8 @@ DEMOSOURCES=Graph.cpp Algorithms.cpp
 TESTSOURCES=Graph.cpp Algorithms.cpp TestCounter.cpp Test.cpp
 DEMOOBJECTS=$(subst .cpp,.o,$(DEMOSOURCES))
 TESTOBJECTS=$(subst .cpp,.o,$(TESTSOURCES))
-
-
+.PHONY: all run demo test tidy valgrind clean
+all: demo test
 run: demo
 	./$^
 

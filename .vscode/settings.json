@@ -1,4 +1,16 @@
 {
+    
+        "makefile.configurations": [
+            {
+                "name": "Default",
+                "makeArgs": []
+            },
+            {
+                "name": "Print make version",
+                "makeArgs": ["--version"]
+            }
+        ],
+       
     "files.associations": {
         "array": "cpp",
         "atomic": "cpp",
@@ -60,5 +72,12 @@
         "streambuf": "cpp",
         "thread": "cpp",
         "typeinfo": "cpp"
-    }
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/imri/SystemProg2Ex1",
+            "binaryPath": "/home/imri/SystemProg2Ex1/test",
+            "binaryArgs": []
+        }
+    ]
 }

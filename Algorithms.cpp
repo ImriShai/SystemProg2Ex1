@@ -2,22 +2,23 @@
 #include "Algorithms.hpp"
 
 using namespace std;
-static bool isContainsCycleUtil(ariel::Graph g, int v, vector<bool>& visited, vector<int>& parent) {
+static int isContainsCycleUtil(ariel::Graph g, int v, vector<bool>& visited, vector<int>& parent) {
        
         visited[(size_t)v] = true; //marking the current vertex as visited
         vector<vector<int>> adjMatrix = g.getAdjMatrix();
         for (size_t i = 0; i < adjMatrix.size(); i++) { //go through all the vertices
             if (adjMatrix[(size_t)v][i] && !visited[i]) { //if there is an edge between the current vertex and the vertex i, and we haven't visited i yet 
-                parent[i] = v; // update the parent of i to be v and recursively call the function
-                if (isContainsCycleUtil(g, i, visited, parent)) { 
-                    return true;
+                parent[i] = v;  // update the parent of i to be v and recursively call the function
+                int res = isContainsCycleUtil(g, i, visited, parent);
+                if (res!=-1) {
+                    return res;
                 }
             }
             else if (adjMatrix[(size_t)v][i] && visited[i] && parent[(size_t)v] != i) { //if there exists an edge between the current vertex and i, and we have visited i, and i is not the parent of v, then there is a cycle
-                return true;
+                return v;
             }
         }
-        return false;
+        return -1;
     }
 static ariel::Graph transpose(ariel::Graph g){
   vector<vector<int>> adjMatrix = g.getAdjMatrix();
@@ -33,6 +34,7 @@ static ariel::Graph transpose(ariel::Graph g){
    
 
 }
+
 static void DFS(ariel::Graph g, int start, vector<bool> &visited){
     visited[(size_t)start] = true;
     vector<vector<int>> adjMatrix = g.getAdjMatrix();
@@ -41,6 +43,15 @@ static void DFS(ariel::Graph g, int start, vector<bool> &visited){
             DFS(g, i, visited);
         }
     }
+}
+static string BFS(ariel::Graph g,int start,int end){
+    return "-1";
+}
+static string dijkstra(ariel::Graph g,int start,int end){
+    return "-1";
+}
+static string bellmanFord(ariel::Graph g,int start,int end){
+    return "-1";
 }
 
  int ariel::Algorithms::isConnected(ariel::Graph g){ //I think it will work
@@ -68,16 +79,19 @@ static void DFS(ariel::Graph g, int start, vector<bool> &visited){
     vector<vector<int>> adjMatrix = g.getAdjMatrix();
     vector<bool> visited(adjMatrix.size(), false);
     vector<int> parent(adjMatrix.size(), -1);
+    int start;
     for (size_t i = 0; i < adjMatrix.size(); i++) {
         if (!visited[i]) {  //if we haven't visited the vertex yet, call the helper function, that updates the parent vector, and returns true if there is a cycle
-            if (isContainsCycleUtil(g, i, visited, parent)) {
+            start = isContainsCycleUtil(g, i, visited, parent);
+            if (start!=-1) {
                 string cycle; //if there is a cycle, we will return the cycle, by going through the parent vector
-                int start = i;
                 while (parent[(size_t)start] != -1) {
-                    cycle += to_string(start) + "->";
+                    cycle = to_string(start) + "->" + cycle;
                     start = parent[(size_t)start];
+
                 }
                 cycle += to_string(i);
+                cycle = to_string(i)+"->"+cycle;
                 return cycle;
             }
         }
@@ -105,15 +119,15 @@ string ariel::Algorithms::isBipartite(ariel::Graph g){
         }
     }
     string res = "The graph is bipartite: A={";
-    for(size_t i=0; i<color.size(); i++){
+    for(size_t i=0; i<color.size(); i++){ //create the string representation of the first set
         if(color[i] == 1){
             res += to_string(i) + ", ";
         }
     }
-    res.pop_back();
-    res.pop_back();
+    res.pop_back(); //remove the last comma
+    res.pop_back(); //remove the last space
     res += "}, B={";
-    for(size_t i=0; i<color.size(); i++){
+    for(size_t i=0; i<color.size(); i++){ //create the string representation of the second set and concatenate it to the first set
         if(color[i] == 0){
             res += to_string(i) + ", ";
         }
@@ -125,7 +139,9 @@ string ariel::Algorithms::isBipartite(ariel::Graph g){
 }
 
 string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end){
-   return "0";
+    if (g.isSameWeight()) return BFS(g,start,end); //might need to check what should I do with negative weights, when all the weights are the same
+    if (!g.isNegative()) return dijkstra(g,start,end);
+    return bellmanFord(g,start,end);
 }
 string ariel::Algorithms::negativeCycle(ariel::Graph g){
     vector<vector<int>> adjMatrix = g.getAdjMatrix();
