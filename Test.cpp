@@ -225,6 +225,25 @@ TEST_CASE("Test isContainsCycle")
             {0, 0, 0, 5, 0}};
         g.loadGraph(graph4);
         CHECK(ariel::Algorithms::isBipartite(g) == "The graph is bipartite: A={0, 2, 4}, B={1, 3}");
+
+         vector<vector<int>> graph5 = {
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0}};
+        g.loadGraph(graph5);
+        CHECK(ariel::Algorithms::isBipartite(g) == "The graph is bipartite: A={0}, B={1, 2}");
+
+        vector<vector<int>> graph6 = {
+            {0,0},
+            {1,0}};
+        g.loadGraph(graph6);
+        CHECK(ariel::Algorithms::isBipartite(g) == "The graph is bipartite: A={0}, B={1}");
+
+         vector<vector<int>> graph7 = {
+            {0}};
+        g.loadGraph(graph7);
+        CHECK(ariel::Algorithms::isBipartite(g) == "The graph is bipartite: A={0}, B={}");
+
     }
     TEST_CASE("Test invalid graph")
     {

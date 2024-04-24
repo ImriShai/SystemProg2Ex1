@@ -386,15 +386,19 @@ static string bellmanFord(ariel::Graph g, int start, int end)
         res.pop_back(); // remove the last comma
         res.pop_back(); // remove the last space
         res += "}, B={";
+        size_t bSize = 0;
         for (size_t i = 0; i < color.size(); i++)
         { // create the string representation of the second set and concatenate it to the first set
-            if (color[i] == 0)
+            if (color[i] <= 0)
             {
                 res += to_string(i) + ", ";
+                bSize++;
             }
         }
+        if(bSize>0){
         res.pop_back();
         res.pop_back();
+    }
         res += "}";
         return res;
     }

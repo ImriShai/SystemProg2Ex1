@@ -18,9 +18,11 @@ int main()
     ariel::Graph g;
 
  vector<vector<int>> testGraph = {
-        {0, 1},
-        {0, 0}};
-    g.loadGraph(testGraph); // Load the graph to the object.
+    
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0}};
+        g.loadGraph(testGraph); // Load the graph to the object.
 
     g.printGraph();                                    // Should print: "Graph with 5 vertices and 7 edges."
     cout << Algorithms::isConnected(g) << endl;        // Should print: "1" (true).
