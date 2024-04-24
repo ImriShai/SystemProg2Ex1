@@ -255,109 +255,113 @@ static string bellmanFord(ariel::Graph g, int start, int end)
             }
         }
     }
-        for (size_t j = 0; j < adjMatrix.size(); j++)
-        { // run the loop one more time, if we can still relax one of the edges, then there is a negative cycle
-            for (size_t k = 0; k < adjMatrix.size(); k++)
-            {
-                
-                    if (!g.isDirected()&& adjMatrix[j][k] != INT_MAX && distance[(size_t)j] != INT_MAX && parent[j] != k && distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k] < distance[(size_t)k])
-                    { // for now, cannot go back to the parent, might need to change it for undirected and directed
-                        throw "Negative cycle detected";
-                    }
-                
-                
-                
-                   else if (g.isDirected() && adjMatrix[j][k] != INT_MAX && distance[(size_t)j] != INT_MAX && distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k] < distance[(size_t)k])
-                    { // for now, cannot go back to the parent, might need to change it for undirected and directed
-                        throw "Negative cycle detected";
-                    }
-                
+    for (size_t j = 0; j < adjMatrix.size(); j++)
+    { // run the loop one more time, if we can still relax one of the edges, then there is a negative cycle
+        for (size_t k = 0; k < adjMatrix.size(); k++)
+        {
+
+            if (!g.isDirected() && adjMatrix[j][k] != INT_MAX && distance[(size_t)j] != INT_MAX && parent[j] != k && distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k] < distance[(size_t)k])
+            { // for now, cannot go back to the parent, might need to change it for undirected and directed
+                return "Negative cycle detected";
+            }
+
+            else if (g.isDirected() && adjMatrix[j][k] != INT_MAX && distance[(size_t)j] != INT_MAX && distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k] < distance[(size_t)k])
+            { // for now, cannot go back to the parent, might need to change it for undirected and directed
+                return "Negative cycle detected";
             }
         }
-
-        if (distance[(size_t)end] == INT_MAX)
-            return "There is no path between vertex " + to_string(start) + " and vertex " + to_string(end);
-        string path = "";
-        for (int v = end; v != -1; v = parent[(size_t)v])
-        { // create the path by going through the parent vector
-            path = to_string(v) + "->" + path;
-        }
-        path = path.substr(0, path.length() - 2); // remove the last "->"
-        return path;
     }
 
-    /**
-     * @brief A function that checks if the graph is connected (stongly connected)
-     * The function run DFS from some vertex, if we cant reach all the vertices, then the graph is not connected.
-     * if we can reach all the vertices, then we transpose the graph and run DFS from the same vertex, if we can reach all the vertices, then the graph is strongly connected
-     * @param g the graph
-     * @return true if the graph is connected, otherwise return false
-     * */
-    bool ariel::Algorithms::isConnected(ariel::Graph g)
-    {
-        vector<bool> visited(g.getAdjMatrix().size(), false);
-        DFS(g, 0, visited); // running DFS from the first vertex
-        for (size_t i = 0; i < visited.size(); i++)
-        {
-            if (!visited[i])
-            {
-                return false; // if there is a vertex that wasn't visited, the graph is not connected
-            }
-            visited[i] = false;
-        }
-        if (!g.isDirected())
-            return true;
+    if (distance[(size_t)end] == INT_MAX)
+        return "There is no path between vertex " + to_string(start) + " and vertex " + to_string(end);
+    string path = "";
+    for (int v = end; v != -1; v = parent[(size_t)v])
+    { // create the path by going through the parent vector
+        path = to_string(v) + "->" + path;
+    }
+    path = path.substr(0, path.length() - 2); // remove the last "->"
+    return path;
+}
 
-        // if we got here, then we can get to any vertex from the first vertex
-        // then we will transpose the graph and run DFS from the first vertex again, if we visit every vertex, then we can reach from every vertex to the first vertex, so the graph is connected
-        ariel::Graph gT;
-        gT = transpose(g);
-        DFS(gT, 0, visited);
-        for (size_t i = 0; i < visited.size(); i++)
+/**
+ * @brief A function that checks if the graph is connected (stongly connected)
+ * The function run DFS from some vertex, if we cant reach all the vertices, then the graph is not connected.
+ * if we can reach all the vertices, then we transpose the graph and run DFS from the same vertex, if we can reach all the vertices, then the graph is strongly connected
+ * @param g the graph
+ * @return true if the graph is connected, otherwise return false
+ * */
+bool ariel::Algorithms::isConnected(ariel::Graph g)
+{
+    vector<bool> visited(g.getAdjMatrix().size(), false);
+    DFS(g, 0, visited); // running DFS from the first vertex
+    for (size_t i = 0; i < visited.size(); i++)
+    {
+        if (!visited[i])
         {
-            if (!visited[i])
-            {
-                return false;
-            }
+            return false; // if there is a vertex that wasn't visited, the graph is not connected
         }
+        visited[i] = false;
+    }
+    if (!g.isDirected())
         return true;
-    }
 
-    string ariel::Algorithms::isContainsCycle(ariel::Graph g)
-    { // running a version of DSF that will return the actual cycle
-        vector<vector<int>> adjMatrix = g.getAdjMatrix();
-        vector<bool> visited(adjMatrix.size(), false);
-        vector<int> parent(adjMatrix.size(), -1);
-        int start;
-        for (size_t i = 0; i < adjMatrix.size(); i++)
+    // if we got here, then we can get to any vertex from the first vertex
+    // then we will transpose the graph and run DFS from the first vertex again, if we visit every vertex, then we can reach from every vertex to the first vertex, so the graph is connected
+    ariel::Graph gT;
+    gT = transpose(g);
+    DFS(gT, 0, visited);
+    for (size_t i = 0; i < visited.size(); i++)
+    {
+        if (!visited[i])
         {
-            if (!visited[i])
-            { // if we haven't visited the vertex yet, call the helper function, that updates the parent vector, and returns true if there is a cycle
-                start = isContainsCycleUtil(g, i, visited, parent);
-                if (start != -1)
+            return false;
+        }
+    }
+    return true;
+}
+
+string ariel::Algorithms::isContainsCycle(ariel::Graph g)
+{ // running a version of DSF that will return the actual cycle
+    vector<vector<int>> adjMatrix = g.getAdjMatrix();
+    vector<bool> visited(adjMatrix.size(), false);
+    vector<int> parent(adjMatrix.size(), -1);
+    int start;
+    for (size_t i = 0; i < adjMatrix.size(); i++)
+    {
+        if (!visited[i])
+        { // if we haven't visited the vertex yet, call the helper function, that updates the parent vector, and returns true if there is a cycle
+            start = isContainsCycleUtil(g, i, visited, parent);
+            if (start != -1)
+            {
+                string cycle; // if there is a cycle, we will return the cycle, by going through the parent vector
+                while (parent[(size_t)start] != -1)
                 {
-                    string cycle; // if there is a cycle, we will return the cycle, by going through the parent vector
-                    while (parent[(size_t)start] != -1)
-                    {
-                        cycle = to_string(start) + "->" + cycle;
-                        start = parent[(size_t)start];
-                    }
-                    cycle += to_string(i);
-                    cycle = to_string(i) + "->" + cycle;
-                    return cycle;
+                    cycle = to_string(start) + "->" + cycle;
+                    start = parent[(size_t)start];
                 }
+                cycle += to_string(i);
+                cycle = to_string(i) + "->" + cycle;
+                return cycle;
             }
         }
-        return "No cycle detected";
     }
+    return "No cycle detected";
+}
 
-    string ariel::Algorithms::isBipartite(ariel::Graph g)
+string ariel::Algorithms::isBipartite(ariel::Graph g)
+{
+    vector<vector<int>> adjMatrix = g.getAdjMatrix();
+    vector<int> color(adjMatrix.size(), -1); // initialize the color vector with -1
+    color[0] = 1;                            // color the first vertex with 1
+    queue<int> q;
+    q.push(0); // push the first vertex to the queue
+    for (size_t i = 0; i < adjMatrix.size(); i++)
     {
-        vector<vector<int>> adjMatrix = g.getAdjMatrix();
-        vector<int> color(adjMatrix.size(), -1); // initialize the color vector with -1
-        color[0] = 1;                            // color the first vertex with 1
-        queue<int> q;
-        q.push(0); // push the first vertex to the queue
+        if (color[i] == -1) {
+            q.push(i);
+            color[i] = 0;
+        }
+
         while (!q.empty())
         {
             int u = q.front();
@@ -375,95 +379,97 @@ static string bellmanFord(ariel::Graph g, int start, int end)
                 }
             }
         }
-        string res = "The graph is bipartite: A={";
-        for (size_t i = 0; i < color.size(); i++)
-        { // create the string representation of the first set
-            if (color[i] == 1)
-            {
-                res += to_string(i) + ", ";
-            }
+    }
+    string res = "The graph is bipartite: A={";
+    for (size_t i = 0; i < color.size(); i++)
+    { // create the string representation of the first set
+        if (color[i] == 1)
+        {
+            res += to_string(i) + ", ";
         }
-        res.pop_back(); // remove the last comma
-        res.pop_back(); // remove the last space
-        res += "}, B={";
-        size_t bSize = 0;
-        for (size_t i = 0; i < color.size(); i++)
-        { // create the string representation of the second set and concatenate it to the first set
-            if (color[i] <= 0)
-            {
-                res += to_string(i) + ", ";
-                bSize++;
-            }
+    }
+    res.pop_back(); // remove the last comma
+    res.pop_back(); // remove the last space
+    res += "}, B={";
+    size_t bSize = 0;
+    for (size_t i = 0; i < color.size(); i++)
+    { // create the string representation of the second set and concatenate it to the first set
+        if (color[i] == 0)
+        {
+            res += to_string(i) + ", ";
+            bSize++;
         }
-        if(bSize>0){
+    }
+    if (bSize > 0)
+    {
         res.pop_back();
         res.pop_back();
     }
-        res += "}";
-        return res;
+    res += "}";
+    return res;
+}
+
+/**
+ * @brief This function finds the shortest path between two vertices in the graph
+ * The function uses the Bellman-Ford algorithm if the graph is negative, the BFS algorithm if the graph is unweighted or has same non-negative weight, and the Dijkstra algorithm if the graph is weighted
+ * @param g the graph
+ * @param start the start vertex
+ * @param end the end vertex
+ * @return the path between the start and end vertices, or an error message if the start or end vertices are invalid, or if there is no path between the start and end vertices
+ */
+string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end)
+{
+    if (start < 0 || end > g.getAdjMatrix().size() - 1 || end < 0 || start > g.getAdjMatrix().size() - 1)
+        return "Start or End vertices are invalid!";
+    if (start == end)
+        return "A path from a vertex to itself isn't defined!";
+    if (g.isNegative())
+        return bellmanFord(g, start, end);
+    if (g.isSameWeight())
+        return BFS(g, start, end);
+    return dijkstra(g, start, end);
+}
+
+/**
+ * @brief This function finds A negative cycle in the graph if exists
+ * the function uses the Bellman-Ford algorithm to find the shortest path from a source vertex to all other vertices.
+ *  by adding a vertex with weight 0 to all other vertices, and then running the Bellman-Ford algorithm, we can get to any negative cycle in the graph, if exists;
+ * I used the wiki page https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm to implement the algorithm
+ * @param g the graph
+ * @return the negative cycle if exists, otherwise return "There is no negative cycle in the graph"
+ */
+string ariel::Algorithms::negativeCycle(ariel::Graph g)
+{
+    if (!g.isNegative())
+        return "There is no negative cycle in the graph";
+    vector<vector<int>> adjMatrixCopy = g.getAdjMatrix();
+    vector<vector<int>> adjMatrix(adjMatrixCopy.size() + 1, vector<int>(adjMatrixCopy.size() + 1, 0)); // initalize a new matrix with the same values as the original matrix, but with a source vector that connected to each vertex with weight 0
+    for (size_t i = 0; i < adjMatrix.size(); i++)
+    {
+        adjMatrix[0][i] = 0;
+        adjMatrix[i][0] = INT_MAX;
+    }
+    for (size_t i = 1; i < adjMatrix.size(); i++)
+    {
+        for (size_t j = 1; j < adjMatrix.size(); j++)
+        {
+            if (adjMatrixCopy[i - 1][j - 1] != 0)
+                adjMatrix[i][j] = adjMatrixCopy[i - 1][j - 1];
+            else
+                adjMatrix[i][j] = INT_MAX;
+        }
     }
 
-    /**
-     * @brief This function finds the shortest path between two vertices in the graph
-     * The function uses the Bellman-Ford algorithm if the graph is negative, the BFS algorithm if the graph is unweighted or has same non-negative weight, and the Dijkstra algorithm if the graph is weighted
-     * @param g the graph
-     * @param start the start vertex
-     * @param end the end vertex
-     * @return the path between the start and end vertices, or an error message if the start or end vertices are invalid, or if there is no path between the start and end vertices
-     */
-    string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end)
-    {
-        if (start < 0 || end > g.getAdjMatrix().size() - 1 || end < 0 || start > g.getAdjMatrix().size() - 1)
-            throw "Start or End vertices are invalid!";
-        if (start == end)
-            throw "A path from a vertex to itself isn't defined!";
-        if (g.isNegative())
-            return bellmanFord(g, start, end);
-        if (g.isSameWeight())
-            return BFS(g, start, end);
-        return dijkstra(g, start, end);
-    }
-
-    /**
-     * @brief This function finds A negative cycle in the graph if exists
-     * the function uses the Bellman-Ford algorithm to find the shortest path from a source vertex to all other vertices.
-     *  by adding a vertex with weight 0 to all other vertices, and then running the Bellman-Ford algorithm, we can get to any negative cycle in the graph, if exists;
-     * I used the wiki page https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm to implement the algorithm
-     * @param g the graph
-     * @return the negative cycle if exists, otherwise return "There is no negative cycle in the graph"
-     */
-    string ariel::Algorithms::negativeCycle(ariel::Graph g)
-    {
-        if (!g.isNegative())
-            return "There is no negative cycle in the graph";
-        vector<vector<int>> adjMatrixCopy = g.getAdjMatrix();
-        vector<vector<int>> adjMatrix(adjMatrixCopy.size() + 1, vector<int>(adjMatrixCopy.size() + 1, 0)); // initalize a new matrix with the same values as the original matrix, but with a source vector that connected to each vertex with weight 0
-        for (size_t i = 0; i < adjMatrix.size(); i++)
+    vector<int> distance(adjMatrix.size(), INT_MAX); // initialize the distance vector with infinity
+    vector<int> parent(adjMatrix.size(), -1);        // initialize the parent vector with -1
+    distance[0] = 0;                                 // set the distance of the source vertex to 0
+    for (size_t i = 0; i <= adjMatrix.size() - 2; i++)
+    { // run the loop n-1 times, where n is the number of vertices, including the new source vertex, each time relax all the edges
+        for (size_t j = 0; j < adjMatrix.size(); j++)
         {
-            adjMatrix[0][i] = 0;
-            adjMatrix[i][0] = INT_MAX;
-        }
-        for (size_t i = 1; i < adjMatrix.size(); i++)
-        {
-            for (size_t j = 1; j < adjMatrix.size(); j++)
+            for (size_t k = 0; k < adjMatrix.size(); k++)
             {
-                if (adjMatrixCopy[i - 1][j - 1] != 0)
-                    adjMatrix[i][j] = adjMatrixCopy[i - 1][j - 1];
-                else
-                    adjMatrix[i][j] = INT_MAX;
-            }
-        }
-    
-        vector<int> distance(adjMatrix.size(), INT_MAX); // initialize the distance vector with infinity
-        vector<int> parent(adjMatrix.size(), -1);        // initialize the parent vector with -1
-        distance[0] = 0;                                 // set the distance of the source vertex to 0
-        for (size_t i = 0; i <= adjMatrix.size() - 2; i++)
-        { // run the loop n-1 times, where n is the number of vertices, including the new source vertex, each time relax all the edges
-            for (size_t j = 0; j < adjMatrix.size(); j++)
-            {
-                for (size_t k = 0; k < adjMatrix.size(); k++)
-                {
-                    if (!g.isDirected())
+                if (!g.isDirected())
                 {
                     if (adjMatrix[j][k] != INT_MAX && distance[(size_t)j] != INT_MAX && parent[j] != k && distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k] < distance[(size_t)k])
                     { // for now, cannot go back to the parent, might need to change it for undirected and directed
@@ -479,62 +485,62 @@ static string bellmanFord(ariel::Graph g, int start, int end)
                         parent[(size_t)k] = j;
                     }
                 }
-                }
             }
         }
-        for (size_t j = 0; j < adjMatrix.size(); j++)
-        { // run the loop one more time, if we can still relax one of the edges, then there is a negative cycle
-            for (size_t k = 0; k < adjMatrix.size(); k++)
-            {
-                if (!g.isDirected()&&parent[j]!=k&&adjMatrix[j][k] != INT_MAX && distance[j] != INT_MAX && distance[j] + adjMatrix[j][k] < distance[k])
-                { // if we can relax the edge
-                    string cycle;
-                    distance[k] = distance[j] + adjMatrix[j][k]; // update the distance and the parent vectors
-                    parent[k] = j;
-                    vector<bool> visited(adjMatrixCopy.size() + 1, false); // initialize the visited vector with false
-                    int u = j;                                             // start from u, mark all the vertices of the cycle as visited
-                    visited[k] = true;
-                    while (!visited[(size_t)u])
-                    {
-                        visited[(size_t)u] = true;
-                        u = parent[(size_t)u];
-                    }
-                    cycle = to_string(u - 1); // create the string representation of the cycle
-                    int v = parent[(size_t)u];
-                    while (v != u)
-                    { // go through the parent vector and create the string representation of the cycle
-                        cycle = to_string(v - 1) + "->" + cycle;
-                        v = parent[(size_t)v];
-                    }
-                    cycle = to_string(u - 1) + "->" + cycle; // add the end of the cycle and return it
-                    return cycle;
-                }
-            
-             if (g.isDirected()&&adjMatrix[j][k] != INT_MAX && distance[j] != INT_MAX && distance[j] + adjMatrix[j][k] < distance[k])
-                { // if we can relax the edge
-                    string cycle;
-                    distance[k] = distance[j] + adjMatrix[j][k]; // update the distance and the parent vectors
-                    parent[k] = j;
-                    vector<bool> visited(adjMatrixCopy.size() + 1, false); // initialize the visited vector with false
-                    int u = j;                                             // start from u, mark all the vertices of the cycle as visited
-                    visited[k] = true;
-                    while (!visited[(size_t)u])
-                    {
-                        visited[(size_t)u] = true;
-                        u = parent[(size_t)u];
-                    }
-                    cycle = to_string(u - 1); // create the string representation of the cycle
-                    int v = parent[(size_t)u];
-                    while (v != u)
-                    { // go through the parent vector and create the string representation of the cycle
-                        cycle = to_string(v - 1) + "->" + cycle;
-                        v = parent[(size_t)v];
-                    }
-                    cycle = to_string(u - 1) + "->" + cycle; // add the end of the cycle and return it
-                    return cycle;
-                }
-            }
-        }
-        
-        return "There is no negative cycle in the graph";
     }
+    for (size_t j = 0; j < adjMatrix.size(); j++)
+    { // run the loop one more time, if we can still relax one of the edges, then there is a negative cycle
+        for (size_t k = 0; k < adjMatrix.size(); k++)
+        {
+            if (!g.isDirected() && parent[j] != k && adjMatrix[j][k] != INT_MAX && distance[j] != INT_MAX && distance[j] + adjMatrix[j][k] < distance[k])
+            { // if we can relax the edge
+                string cycle;
+                distance[k] = distance[j] + adjMatrix[j][k]; // update the distance and the parent vectors
+                parent[k] = j;
+                vector<bool> visited(adjMatrixCopy.size() + 1, false); // initialize the visited vector with false
+                int u = j;                                             // start from u, mark all the vertices of the cycle as visited
+                visited[k] = true;
+                while (!visited[(size_t)u])
+                {
+                    visited[(size_t)u] = true;
+                    u = parent[(size_t)u];
+                }
+                cycle = to_string(u - 1); // create the string representation of the cycle
+                int v = parent[(size_t)u];
+                while (v != u)
+                { // go through the parent vector and create the string representation of the cycle
+                    cycle = to_string(v - 1) + "->" + cycle;
+                    v = parent[(size_t)v];
+                }
+                cycle = to_string(u - 1) + "->" + cycle; // add the end of the cycle and return it
+                return cycle;
+            }
+
+            if (g.isDirected() && adjMatrix[j][k] != INT_MAX && distance[j] != INT_MAX && distance[j] + adjMatrix[j][k] < distance[k])
+            { // if we can relax the edge
+                string cycle;
+                distance[k] = distance[j] + adjMatrix[j][k]; // update the distance and the parent vectors
+                parent[k] = j;
+                vector<bool> visited(adjMatrixCopy.size() + 1, false); // initialize the visited vector with false
+                int u = j;                                             // start from u, mark all the vertices of the cycle as visited
+                visited[k] = true;
+                while (!visited[(size_t)u])
+                {
+                    visited[(size_t)u] = true;
+                    u = parent[(size_t)u];
+                }
+                cycle = to_string(u - 1); // create the string representation of the cycle
+                int v = parent[(size_t)u];
+                while (v != u)
+                { // go through the parent vector and create the string representation of the cycle
+                    cycle = to_string(v - 1) + "->" + cycle;
+                    v = parent[(size_t)v];
+                }
+                cycle = to_string(u - 1) + "->" + cycle; // add the end of the cycle and return it
+                return cycle;
+            }
+        }
+    }
+
+    return "There is no negative cycle in the graph";
+}

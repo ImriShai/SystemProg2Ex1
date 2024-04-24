@@ -68,10 +68,10 @@ TEST_CASE("Test shortestPath for BFS and BF")
         {0, 0, 0, 0, 0}};
     g.loadGraph(graph2);
     CHECK(ariel::Algorithms::shortestPath(g, 0, 4) == "There is no path between vertex 0 and vertex 4");
-    CHECK_THROWS(ariel::Algorithms::shortestPath(g, -1, 4));
-    CHECK_THROWS(ariel::Algorithms::shortestPath(g, 0, 8));
-    CHECK_THROWS(ariel::Algorithms::shortestPath(g, 8, 0));
-    CHECK_THROWS(ariel::Algorithms::shortestPath(g, 0, 0));
+    CHECK(ariel::Algorithms::shortestPath(g, -1, 4)=="Start or End vertices are invalid!");
+    CHECK(ariel::Algorithms::shortestPath(g, 0, 8) == "Start or End vertices are invalid!");
+    CHECK(ariel::Algorithms::shortestPath(g, 8, 0) == "Start or End vertices are invalid!");
+    CHECK(ariel::Algorithms::shortestPath(g, 0, 0) == "A path from a vertex to itself isn't defined!");
 
     vector<vector<int>> graph3 = {
         {0, 8, -1},
@@ -88,14 +88,14 @@ TEST_CASE("Test shortestPath for BFS and BF")
         {3, 0, -5},
         {-1, -5, 0}};
     g.loadGraph(graph4);
-    CHECK_THROWS(ariel::Algorithms::shortestPath(g, 0, 2));
+    CHECK(ariel::Algorithms::shortestPath(g, 0, 2) =="Negative cycle detected");
 
     vector<vector<int>> graph5 = {
         {0, 8, -2},
         {8, 0, -5},
         {-1, -5, 0}};
     g.loadGraph(graph5);
-    CHECK_THROWS(ariel::Algorithms::shortestPath(g, 0, 2));
+    CHECK(ariel::Algorithms::shortestPath(g, 0, 2) == "Negative cycle detected");
 }
 TEST_CASE("Test shortest path Dijkstra")
 {
