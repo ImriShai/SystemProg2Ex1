@@ -24,11 +24,16 @@ void Graph::loadGraph(vector<vector<int>> adjMatrix) {
     for(size_t i = 0; i < numVertices; i++){
         for(size_t j = 0; j < numVertices; j++){
             if(adjMatrix[i][j] != 0){
+                if (i==j)
+                {
+                    throw invalid_argument("Not a valid graph!");
+                }
+                
                 numEdges++;   //counting each edge
-                if (adjMatrix[i][j]<0) negative =true;
-                if (adjMatrix[i][j]!=adjMatrix[j][i]) directed = true;
-                if (adjMatrix[i][j]!=0&&adjMatrix[i][j]!=1) weighted = true;
-                if (firstEdge){
+                if (adjMatrix[i][j]<0) negative =true; //updates negative if there is a negative edge
+                if (adjMatrix[i][j]!=adjMatrix[j][i]) directed = true; //updates directed if the graph is directed
+                if (adjMatrix[i][j]!=0&&adjMatrix[i][j]!=1) weighted = true; //updates weighted if the graph is weighted
+                if (firstEdge){ //checks if all the edges have the same weight, uses a flag to check the first valid edge, and then compares all the other edges to it
                     firstEdgeVal = adjMatrix[i][j];
                     firstEdge = false;
                 }

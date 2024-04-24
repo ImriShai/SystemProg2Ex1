@@ -4,26 +4,41 @@
  */
 #include "Graph.hpp"
 #include "Algorithms.hpp"
+
 using ariel::Algorithms;
 
 #include <iostream>
 #include <stdexcept>
 #include <vector>
+
 using namespace std;
 
 int main()
 {
     ariel::Graph g;
+
+ vector<vector<int>> testGraph = {
+        {0, 1},
+        {0, 0}};
+    g.loadGraph(testGraph); // Load the graph to the object.
+
+    g.printGraph();                                    // Should print: "Graph with 5 vertices and 7 edges."
+    cout << Algorithms::isConnected(g) << endl;        // Should print: "1" (true).
+    cout << Algorithms::shortestPath(g, 0, 4) << endl; // Should print: 0->1->2->3->4.
+    cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "0" (false).
+    cout << Algorithms::isBipartite(g) << endl;        // Should print: "The graph is bipartite: A={0, 2, 4}, B={1, 3}."
+
+
     // 3x3 matrix that represents a connected graph.
-    vector<vector<int>> graph = {
-        {0, -1, 0},
-        {0, 0, 1},
-        {0, 0, 0}};
+    vector<vector<int>> graph =
+        {{0, 1, 0},
+         {1, 0, 1},
+         {0, 1, 0}};
     g.loadGraph(graph); // Load the graph to the object.
 
     g.printGraph();                                    // Should print: "Graph with 3 vertices and 2 edges."
     cout << Algorithms::isConnected(g) << endl;        // Should print: "1" (true).
-    cout << Algorithms::shortestPath(g, 0, 2) << endl; // Should print: 0->1->2.
+    cout << Algorithms::shortestPath(g, 0, 1) << endl; // Should print: 0->1->2.
     cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "0" (false).
     cout << Algorithms::isBipartite(g) << endl;        // Should print: "The graph is bipartite: A={0, 2}, B={1}."
 
@@ -75,10 +90,12 @@ int main()
     }
 
     vector<vector<int>> graph5 = {
-            {0, 0, 0,0},
-            {4, 0, -6,0},
-            {0, 0, 0,5},
-            {0,-2,0,0}};
+        {0, 0, 0, 0},
+        {4, 0, -6, 0},
+        {0, 0, 0, 5},
+        {0, -2, 0, 0}};
     g.loadGraph(graph5);
-    cout<<ariel::Algorithms::negativeCycle(g);//== "0->1->2->0");
+    cout << ariel::Algorithms::negativeCycle(g) << endl; //== "0->1->2->0");
+
+   
 }

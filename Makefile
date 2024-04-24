@@ -10,7 +10,7 @@ DEMOOBJECTS=$(subst .cpp,.o,$(DEMOSOURCES))
 TESTOBJECTS=$(subst .cpp,.o,$(TESTSOURCES))
 .PHONY: all run demo test tidy valgrind clean
 all: demo test
-run: demo
+run: test
 	./$^
 
 demo: Demo.o $(DEMOOBJECTS)
