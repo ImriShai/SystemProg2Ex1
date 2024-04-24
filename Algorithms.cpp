@@ -36,6 +36,9 @@ static int isContainsCycleUtil(ariel::Graph g, int v, vector<bool> &visited, vec
         }
         else if (adjMatrix[(size_t)v][i] && visited[i] && g.isDirected())
         { // if the graph is directed, we can go back to the parent
+            size_t pre = (size_t)v;
+            while(parent[pre]!=-1) pre = (size_t)parent[pre];// make sure that v and i are actually at the same cycle, and that i is not just visited before, but with no link to v
+            if (pre==i)
             return v;
         }
     }

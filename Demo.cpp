@@ -17,18 +17,7 @@ int main()
 {
     ariel::Graph g;
 
-    vector<vector<int>> graph5 = {
-            {0, 0, 0, 0},
-            {4, 0, -6, 0},
-            {0, 0, 0, 5},
-            {0, -2, 0, 0}};
-    g.loadGraph(graph5);
-    g.printGraph();                                    // Should print: "This is a directed weighted graph with negative weights, 4 vertices and 4 edges"
-    cout << Algorithms::isConnected(g) << endl;        // Should print: "0" (false).
-    cout << Algorithms::shortestPath(g, 0, 3) << endl; // Should print: "Negative cycle detected" (false).
-    cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "No cycle detected" (false).
-    cout << Algorithms::isBipartite(g) << endl;        // Should print: "There is no valid bipartite partition of the graph"
-    cout << ariel::Algorithms::negativeCycle(g) << endl; //== "0->1->2->0");
+
 
  vector<vector<int>> testGraph = {
            {0, 0, 0},
@@ -103,7 +92,16 @@ int main()
         cout << e.what() << endl; // Should print: "Not a valid graph!"
     }
 
-
-
-   
+    vector<vector<int>> graph5 = {
+            {0, 0, 0, 0},
+            {4, 0, -6, 0},
+            {0, 0, 0, 5},
+            {0, -2, 0, 0}};
+    g.loadGraph(graph5);
+    g.printGraph();                                    // Should print: "This is a directed weighted graph with negative weights, 4 vertices and 4 edges"
+    cout << Algorithms::isConnected(g) << endl;        // Should print: "0" (false).
+    cout << Algorithms::shortestPath(g, 0, 3) << endl; // Should print: "There is no path between vertex 0 and vertex 3" (false). Notice that because there is no edge from vertex 0 to any other vertex, the negative cycle wasn't encountered, so it returns no path
+    cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "No cycle detected" (false).
+    cout << Algorithms::isBipartite(g) << endl;        // Should print: "There is no valid bipartite partition of the graph"
+    cout << ariel::Algorithms::negativeCycle(g) << endl; //== "0->1->2->0");
 }

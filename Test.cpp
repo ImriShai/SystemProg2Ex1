@@ -96,6 +96,14 @@ TEST_CASE("Test shortestPath for BFS and BF")
         {-1, -5, 0}};
     g.loadGraph(graph5);
     CHECK(ariel::Algorithms::shortestPath(g, 0, 2) == "Negative cycle detected");
+
+     vector<vector<int>> graph7 = {
+            {0, 0, 0, 0},
+            {4, 0, -6, 0},
+            {0, 0, 0, 5},
+            {0, -2, 0, 0}};
+        g.loadGraph(graph7);
+        CHECK(ariel::Algorithms::shortestPath(g, 0, 3) == "There is no path between vertex 0 and vertex 3");
 }
 TEST_CASE("Test shortest path Dijkstra")
 {
@@ -186,7 +194,14 @@ TEST_CASE("Test isContainsCycle")
     graph6[1][2] = 6;
     g.loadGraph(graph6);
     CHECK((ariel::Algorithms::isContainsCycle(g) == "2->0->1"||ariel::Algorithms::isContainsCycle(g)=="0->1->2->0")); //directed is by graph, or by edge?
-
+    
+     vector<vector<int>> graph7 = {
+            {0, 0, 0, 0},
+            {4, 0, -6, 0},
+            {0, 0, 0, 5},
+            {0, -2, 0, 0}};
+        g.loadGraph(graph7);
+        CHECK(ariel::Algorithms::isContainsCycle(g) == "1->2->3->1");
 }
     TEST_CASE("Test isBipartite") 
     {
@@ -243,6 +258,14 @@ TEST_CASE("Test isContainsCycle")
             {0}};
         g.loadGraph(graph7);
         CHECK(ariel::Algorithms::isBipartite(g) == "The graph is bipartite: A={0}, B={}");
+
+        vector<vector<int>> graph8 = {
+            {0, 0, 0, 0},
+            {4, 0, -6, 0},
+            {0, 0, 0, 5},
+            {0, -2, 0, 0}};
+        g.loadGraph(graph8);
+        CHECK(ariel::Algorithms::isBipartite(g) == "There is no valid bipartite partition of the graph");
 
     }
     TEST_CASE("Test invalid graph")
@@ -309,4 +332,12 @@ TEST_CASE("Test isContainsCycle")
             {-1, -5, 0}};
         g.loadGraph(graph5);
         CHECK((ariel::Algorithms::negativeCycle(g) == "0->2->0" || ariel::Algorithms::negativeCycle(g) == "2->0->2"));
+
+         vector<vector<int>> graph8 = {
+            {0, 0, 0, 0},
+            {4, 0, -6, 0},
+            {0, 0, 0, 5},
+            {0, -2, 0, 0}};
+        g.loadGraph(graph8);
+        CHECK(ariel::Algorithms::negativeCycle(g) == "1->2->3->1");
     }
