@@ -355,15 +355,28 @@ string ariel::Algorithms::isBipartite(ariel::Graph g)
 {
     vector<vector<int>> adjMatrix = g.getAdjMatrix();
     vector<int> color(adjMatrix.size(), -1); // initialize the color vector with -1
-    color[0] = 1;                            // color the first vertex with 1
+                               // color the first vertex with 1
     queue<int> q;
-    q.push(0); // push the first vertex to the queue
     for (size_t i = 0; i < adjMatrix.size(); i++)
     {
         if (color[i] == -1) {
-            q.push(i);
-            color[i] = 0;
+           for (size_t j = 0; j < adjMatrix.size(); j++)
+           {
+             if (adjMatrix[i][j] && color[j] != -1)
+             {
+                color[i] = 1 - color[j];
+                q.push(i);
+                break;
+             }
+           }
+           
         }
+        if(color[i]==-1){
+            color[i] = 1;
+            q.push(i);
+        }
+       
+        
 
         while (!q.empty())
         {
