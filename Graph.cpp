@@ -42,8 +42,12 @@ void Graph::loadGraph(vector<vector<int>> adjMatrix) {
         }
     }
     if (!directed) numEdges/=2;
+    loaded = true;
 }
 void Graph::printGraph() {
+     if(!loaded){
+            throw invalid_argument("The graph is not loaded");
+        }
     if (!directed&&!weighted){
         cout<<"This is a undirected and unweighted graph with " << numVertices << " vertices and " << numEdges <<" edges"<<endl;
     }

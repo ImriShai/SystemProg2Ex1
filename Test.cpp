@@ -4,6 +4,24 @@
 
 using namespace std;
 
+TEST_CASE("Test without loading"){
+    ariel :: Graph g;
+    CHECK_THROWS(g.printGraph());
+    CHECK_THROWS(g.isDirected());
+    CHECK_THROWS(g.isNegative());
+    CHECK_THROWS(g.isWeighted());
+    CHECK_THROWS(g.isSameWeight());
+    CHECK(g.isLoaded() == false);
+    CHECK_THROWS(ariel::Algorithms::isConnected(g));
+    CHECK_THROWS(ariel::Algorithms::isBipartite(g));
+    CHECK_THROWS(ariel::Algorithms::isContainsCycle(g));
+    CHECK_THROWS(ariel::Algorithms::negativeCycle(g));
+    CHECK_THROWS(ariel::Algorithms::shortestPath(g, 0, 1));
+
+   
+
+}
+
 TEST_CASE("Test isConnected")
 {
     ariel::Graph g;

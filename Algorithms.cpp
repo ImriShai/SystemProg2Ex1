@@ -295,6 +295,9 @@ static string bellmanFord(ariel::Graph g, int start, int end)
  * */
 bool ariel::Algorithms::isConnected(ariel::Graph g)
 {
+     if(!g.isLoaded()){
+            throw invalid_argument("The graph is not loaded");
+        }
     vector<bool> visited(g.getAdjMatrix().size(), false);
     DFS(g, 0, visited); // running DFS from the first vertex
     for (size_t i = 0; i < visited.size(); i++)
@@ -325,6 +328,9 @@ bool ariel::Algorithms::isConnected(ariel::Graph g)
 
 string ariel::Algorithms::isContainsCycle(ariel::Graph g)
 { // running a version of DSF that will return the actual cycle
+ if(!g.isLoaded()){
+            throw invalid_argument("The graph is not loaded");
+        }
     vector<vector<int>> adjMatrix = g.getAdjMatrix();
     vector<bool> visited(adjMatrix.size(), false);
     vector<int> parent(adjMatrix.size(), -1);
@@ -353,6 +359,9 @@ string ariel::Algorithms::isContainsCycle(ariel::Graph g)
 
 string ariel::Algorithms::isBipartite(ariel::Graph g)
 {
+     if(!g.isLoaded()){
+            throw invalid_argument("The graph is not loaded");
+        }
     vector<vector<int>> adjMatrix = g.getAdjMatrix();
     vector<int> color(adjMatrix.size(), -1); // initialize the color vector with -1
                                // color the first vertex with 1
@@ -435,6 +444,9 @@ string ariel::Algorithms::isBipartite(ariel::Graph g)
  */
 string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end)
 {
+     if(!g.isLoaded()){
+            throw invalid_argument("The graph is not loaded");
+        }
     if (start < 0 || end > g.getAdjMatrix().size() - 1 || end < 0 || start > g.getAdjMatrix().size() - 1)
         return "Start or End vertices are invalid!";
     if (start == end)
@@ -454,8 +466,11 @@ string ariel::Algorithms::shortestPath(ariel::Graph g, int start, int end)
  * @param g the graph
  * @return the negative cycle if exists, otherwise return "There is no negative cycle in the graph"
  */
-string ariel::Algorithms::negativeCycle(ariel::Graph g)
-{
+string ariel::Algorithms::negativeCycle(ariel::Graph g){
+ if(!g.isLoaded()){
+            throw invalid_argument("The graph is not loaded");
+        }
+
     if (!g.isNegative())
         return "There is no negative cycle in the graph";
     vector<vector<int>> adjMatrixCopy = g.getAdjMatrix();
