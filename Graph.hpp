@@ -4,6 +4,8 @@
 #include <vector>
 using namespace std;
 namespace ariel{
+
+/** A class representing a graph*/
 class Graph{
     private:
      vector<vector<int>> adjMatrix;

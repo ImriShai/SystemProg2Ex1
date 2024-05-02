@@ -2,6 +2,10 @@
 #include "Algorithms.hpp"
 #include "Graph.hpp"
 
+/**
+ * @brief Test cases for the Graph class and the Algorithms class
+*/
+
 using namespace std;
 
 TEST_CASE("Test without loading"){

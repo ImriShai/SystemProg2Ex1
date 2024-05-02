@@ -86,7 +86,7 @@ static void DFS(ariel::Graph g, int start, vector<bool> &visited)
     }
 }
 /**
- * @brief A function that runs the Breadth First Search algorithm on the graph
+ * @brief A function that runs the Breadth First Search algorithm on the graph in order to find the shortest path between two vertices
  * The function uses the adjacency matrix of the graph, and the visited, distance, and parent vectors to keep track of the visited vertices, the distance from the start vertex, and the parent of each vertex
  * The function uses a queue to keep track of the vertices that we need to visit
  * The function goes through all the vertices, if there is an edge between the front vertex and the current vertex, and the current vertex wasn't visited yet, mark it as visited, update its distance and parent vectors, and push it to the queue
@@ -242,7 +242,7 @@ static string bellmanFord(ariel::Graph g, int start, int end)
                 if (!g.isDirected())
                 {
                     if (adjMatrix[j][k] != INT_MAX && distance[(size_t)j] != INT_MAX && parent[j] != k && distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k] < distance[(size_t)k])
-                    { // for now, cannot go back to the parent, might need to change it for undirected and directed
+                    { // if the graph isn't directed, we cannot go back to the parent
                         distance[(size_t)k] = distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k];
                         parent[(size_t)k] = j;
                     }
@@ -250,7 +250,7 @@ static string bellmanFord(ariel::Graph g, int start, int end)
                 if (g.isDirected())
                 {
                     if (adjMatrix[j][k] != INT_MAX && distance[(size_t)j] != INT_MAX && distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k] < distance[(size_t)k])
-                    { // for now, cannot go back to the parent, might need to change it for undirected and directed
+                    { // else, we allow going back to the parent
                         distance[(size_t)k] = distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k];
                         parent[(size_t)k] = j;
                     }
@@ -264,12 +264,12 @@ static string bellmanFord(ariel::Graph g, int start, int end)
         {
 
             if (!g.isDirected() && adjMatrix[j][k] != INT_MAX && distance[(size_t)j] != INT_MAX && parent[j] != k && distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k] < distance[(size_t)k])
-            { // for now, cannot go back to the parent, might need to change it for undirected and directed
+            { // if the graph isn't directed, we cannot go back to the parent
                 return "Negative cycle detected";
             }
 
             else if (g.isDirected() && adjMatrix[j][k] != INT_MAX && distance[(size_t)j] != INT_MAX && distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k] < distance[(size_t)k])
-            { // for now, cannot go back to the parent, might need to change it for undirected and directed
+            { // else, we allow going back to the parent
                 return "Negative cycle detected";
             }
         }
@@ -357,18 +357,25 @@ string ariel::Algorithms::isContainsCycle(ariel::Graph g)
     return "No cycle detected";
 }
 
+
+/**
+ * @brief This function checks if the graph is bipartite
+ * The function uses the BFS algorithm to check if the graph is bipartite, for every vertex in the graph, if the vertex is not colored yet, check if its connected to a vertex thats already colored, if so color it with the opposite color
+ * then check all of its neighbors, if they are not colored yet, add them to the queue. If there is and edge between two colord vertices with the same color, then the graph is not bipartite.
+ * @param g the graph
+ * @return the two sets of the bipartite graph, or an error message if the graph is not bipartite
+ */
 string ariel::Algorithms::isBipartite(ariel::Graph g)
 {
      if(!g.isLoaded()){
             throw invalid_argument("The graph is not loaded");
         }
     vector<vector<int>> adjMatrix = g.getAdjMatrix();
-    vector<int> color(adjMatrix.size(), -1); // initialize the color vector with -1
-                               // color the first vertex with 1
+    vector<int> color(adjMatrix.size(), -1); // initialize the color vector with -1        
     queue<int> q;
-    for (size_t i = 0; i < adjMatrix.size(); i++)
+    for (size_t i = 0; i < adjMatrix.size(); i++) //for every vertex in the graph
     {
-        if (color[i] == -1) {
+        if (color[i] == -1) { // if the vertex is not colored yet, check if its connected to a vertex thats already colored, if so color it with the opposite color
            for (size_t j = 0; j < adjMatrix.size(); j++)
            {
              if (adjMatrix[i][j] && color[j] != -1)
@@ -380,7 +387,7 @@ string ariel::Algorithms::isBipartite(ariel::Graph g)
            }
            
         }
-        if(color[i]==-1){
+        if(color[i]==-1){ // if the vertex is not connected to any other vertex, color it with 1
             color[i] = 1;
             q.push(i);
         }
@@ -503,7 +510,7 @@ string ariel::Algorithms::negativeCycle(ariel::Graph g){
                 if (!g.isDirected())
                 {
                     if (adjMatrix[j][k] != INT_MAX && distance[(size_t)j] != INT_MAX && parent[j] != k && distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k] < distance[(size_t)k])
-                    { // for now, cannot go back to the parent, might need to change it for undirected and directed
+                    { // if the graph isn't directed, we cannot go back to the parent
                         distance[(size_t)k] = distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k];
                         parent[(size_t)k] = j;
                     }
@@ -511,7 +518,7 @@ string ariel::Algorithms::negativeCycle(ariel::Graph g){
                 if (g.isDirected())
                 {
                     if (adjMatrix[j][k] != INT_MAX && distance[(size_t)j] != INT_MAX && distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k] < distance[(size_t)k])
-                    { // for now, cannot go back to the parent, might need to change it for undirected and directed
+                    { // else, we allow going back to the parent
                         distance[(size_t)k] = distance[(size_t)j] + adjMatrix[(size_t)j][(size_t)k];
                         parent[(size_t)k] = j;
                     }
@@ -523,7 +530,7 @@ string ariel::Algorithms::negativeCycle(ariel::Graph g){
     { // run the loop one more time, if we can still relax one of the edges, then there is a negative cycle
         for (size_t k = 0; k < adjMatrix.size(); k++)
         {
-            if (!g.isDirected() && parent[j] != k && adjMatrix[j][k] != INT_MAX && distance[j] != INT_MAX && distance[j] + adjMatrix[j][k] < distance[k])
+            if (!g.isDirected() && parent[j] != k && adjMatrix[j][k] != INT_MAX && distance[j] != INT_MAX && distance[j] + adjMatrix[j][k] < distance[k]) //if the graph isn't directed, we cannot go back to the parent, thats the undirected case
             { // if we can relax the edge
                 string cycle;
                 distance[k] = distance[j] + adjMatrix[j][k]; // update the distance and the parent vectors
@@ -547,7 +554,7 @@ string ariel::Algorithms::negativeCycle(ariel::Graph g){
                 return cycle;
             }
 
-            if (g.isDirected() && adjMatrix[j][k] != INT_MAX && distance[j] != INT_MAX && distance[j] + adjMatrix[j][k] < distance[k])
+            if (g.isDirected() && adjMatrix[j][k] != INT_MAX && distance[j] != INT_MAX && distance[j] + adjMatrix[j][k] < distance[k])//else, we allow going back to the parent, thats the directed case
             { // if we can relax the edge
                 string cycle;
                 distance[k] = distance[j] + adjMatrix[j][k]; // update the distance and the parent vectors

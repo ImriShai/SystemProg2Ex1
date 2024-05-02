@@ -13,7 +13,7 @@ void Graph::loadGraph(vector<vector<int>> adjMatrix) {
     }
     
     this->adjMatrix = adjMatrix; //loading the actual matrix
-    this->numVertices = adjMatrix.size(); 
+    this->numVertices = adjMatrix.size(); //Initializing all flags for later use
     this->numEdges = 0;
     this->directed = false;
     this->weighted = false;
@@ -44,7 +44,7 @@ void Graph::loadGraph(vector<vector<int>> adjMatrix) {
     if (!directed) numEdges/=2;
     loaded = true;
 }
-void Graph::printGraph() {
+void Graph::printGraph() { //prints the graph according to the flags
      if(!loaded){
             throw invalid_argument("The graph is not loaded");
         }
