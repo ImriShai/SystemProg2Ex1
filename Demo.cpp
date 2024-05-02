@@ -15,23 +15,8 @@ using namespace std;
 
 int main()
 {
-    ariel::Graph g;
 
-
-
- vector<vector<int>> testGraph = {
-           {0, 0, 0},
-           {0, 0, 0},
-           {0, 0, 0}};
-        g.loadGraph(testGraph); // Load the graph to the object.
-
-    g.printGraph();                                    // Should print: "This is a undirected and unweighted graph with 3 vertices and 0 edges"
-    cout << Algorithms::isConnected(g) << endl;        // Should print: "0" (false).
-    cout << Algorithms::shortestPath(g, 0, 4) << endl; // Should print: "Start or End vertices are invalid!"
-    cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "No cycle detected" (false)
-    cout << Algorithms::isBipartite(g) << endl;        // Should print: "The graph is bipartite: A={0}, B={1, 2}"
-
-
+ariel::Graph g;
     // 3x3 matrix that represents a connected graph.
     vector<vector<int>> graph =
         {{0, 1, 0},
@@ -44,6 +29,7 @@ int main()
     cout << Algorithms::shortestPath(g, 0, 1) << endl; // Should print: 0->1.
     cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "No cycle detected" (false)
     cout << Algorithms::isBipartite(g) << endl;        // Should print: "The graph is bipartite: A={0, 2}, B={1}."
+    cout << ariel::Algorithms::negativeCycle(g) << endl; //Should print: "There is no negative cycle in the graph" (false).
 
     // 5x5 matrix that represents a non-connected graph with a cycle.
     vector<vector<int>> graph2 = {
@@ -60,6 +46,7 @@ int main()
     cout << Algorithms::shortestPath(g, 0, 4) << endl; // Should print: "There is no path between vertex 0 and vertex 4" (false).
     cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "0->1->2->0" (The actual cycle)
     cout << Algorithms::isBipartite(g) << endl;        // Should print: "There is no valid bipartite partition of the graph" (false).
+    cout << ariel::Algorithms::negativeCycle(g) << endl; //Should print: "Should print: "There is no negative cycle in the graph" (false).
 
     // 5x5 matrix that reprsents a connected weighted graph.
     vector<vector<int>> graph3 = {
@@ -75,6 +62,7 @@ int main()
     cout << Algorithms::shortestPath(g, 0, 4) << endl; // Should print: 0->1->2->3->4.
     cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "No cycle detected" (false).
     cout << Algorithms::isBipartite(g) << endl;        // Should print: "The graph is bipartite: A={0, 2, 4}, B={1, 3}."
+    cout << ariel::Algorithms::negativeCycle(g) << endl; //Should print: "Should print: "There is no negative cycle in the graph" (false).
 
     // 5x4 matrix that reprsents invalid graph.
     vector<vector<int>> graph4 = {
@@ -101,7 +89,21 @@ int main()
     g.printGraph();                                    // Should print: "This is a directed weighted graph with negative weights, 4 vertices and 4 edges"
     cout << Algorithms::isConnected(g) << endl;        // Should print: "0" (false).
     cout << Algorithms::shortestPath(g, 0, 3) << endl; // Should print: "There is no path between vertex 0 and vertex 3" (false). Notice that because there is no edge from vertex 0 to any other vertex, the negative cycle wasn't encountered, so it returns no path
-    cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "No cycle detected" (false).
+    cout << Algorithms::shortestPath(g, 3, 0) << endl; // Should print: "Negative cycle detected" (So no shoretest path is possible)
     cout << Algorithms::isBipartite(g) << endl;        // Should print: "There is no valid bipartite partition of the graph"
-    cout << ariel::Algorithms::negativeCycle(g) << endl; //== "0->1->2->0");
+    cout << ariel::Algorithms::negativeCycle(g) << endl; //Should print: "1->2->3->1" (The negative cycle);
+
+     vector<vector<int>> Graph6 = {
+           {0, 0, 0},
+           {0, 0, 0},
+           {0, 0, 0}};
+        g.loadGraph(Graph6); // Load the graph to the object.
+
+    g.printGraph();                                    // Should print: "This is a undirected and unweighted graph with 3 vertices and 0 edges"
+    cout << Algorithms::isConnected(g) << endl;        // Should print: "0" (false).
+    cout << Algorithms::shortestPath(g, 0,4) << endl; // Should print: "Start or End vertices are invalid!"
+    cout << Algorithms::shortestPath(g, 0,2) << endl; // Should print: "There is no path between vertex 0 and vertex 2"  
+    cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "No cycle detected" (false)
+    cout << Algorithms::isBipartite(g) << endl;        // Should print: "The graph is bipartite: A={0, 1, 2}, B={}"
+    cout << ariel::Algorithms::negativeCycle(g) << endl; //Should print: "There is no negative cycle in the graph" (false).;
 }

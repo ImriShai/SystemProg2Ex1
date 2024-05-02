@@ -386,3 +386,21 @@ TEST_CASE("Test isBipartite")
         g.loadGraph(graph8);
         CHECK(ariel::Algorithms::negativeCycle(g) == "1->2->3->1");
     }
+
+    TEST_CASE("Empty graph"){
+        ariel::Graph g;
+        vector<vector<int>> graph = {};
+        CHECK_THROWS(g.loadGraph(graph));
+
+        vector<vector<int>> graph1 = {
+            {0,0,0},
+            {0,0,0},
+            {0,0,0}};
+        g.loadGraph(graph1);
+        CHECK(ariel::Algorithms::isConnected(g) == false);
+        CHECK(ariel::Algorithms::isContainsCycle(g) == "No cycle detected");
+        CHECK(ariel::Algorithms::shortestPath(g, 0, 1) == "There is no path between vertex 0 and vertex 1");
+        CHECK(ariel::Algorithms::isBipartite(g) == "The graph is bipartite: A={0, 1, 2}, B={}");
+        CHECK(ariel::Algorithms::negativeCycle(g) == "There is no negative cycle in the graph");
+
+    }
