@@ -138,6 +138,15 @@ TEST_CASE("Test shortestPath for BFS and BF")
     CHECK(ariel::Algorithms::shortestPath(g,0,2) == "0->2");
     CHECK(ariel::Algorithms::shortestPath(g,1,0) == "1->2->0");
 
+    vector<vector<int>> graph9={{0, 4, 2, 0, 0, 0},
+                                {4, 0, -5, -5, 0, -7},
+                                {2, -5, 0, 0, -1, 0},
+                                {0, -5, 0, 0, 0, 0},
+                                {0, 0, -1, 0, 0, 0},
+                                {0, -7, 0, 0, 0, 0}};
+    g.loadGraph(graph9);
+    CHECK(ariel::Algorithms::shortestPath(g,0,5)=="0->2->1->5");
+
 
 
 }
