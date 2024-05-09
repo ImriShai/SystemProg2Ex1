@@ -44,7 +44,7 @@ void Graph::loadGraph(vector<vector<int>> adjMatrix) {
     if (!directed) numEdges/=2;
     loaded = true;
 }
-void Graph::printGraph() { //prints the graph according to the flags
+ const void Graph::printGraph()  { //prints the graph according to the flags
      if(!loaded){
             throw invalid_argument("The graph is not loaded");
         }

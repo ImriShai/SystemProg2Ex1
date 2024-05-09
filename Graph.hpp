@@ -18,37 +18,37 @@ class Graph{
     bool loaded;
     public:
     Graph():loaded(false){};
-    vector<vector<int>> getAdjMatrix(){
+    const vector<vector<int>>& getAdjMatrix() const{
         return adjMatrix;
     }
-    void printGraph();
+    const void printGraph();
 
-    bool isDirected(){
+    const bool isDirected() const{
          if(!loaded){
             throw invalid_argument("The graph is not loaded");
         }
         return directed;
     }
-    bool isNegative(){
+   const  bool isNegative() const{
          if(!loaded){
             throw invalid_argument("The graph is not loaded");
         }
         return negative;
     }
-    bool isWeighted(){
+   const  bool isWeighted() const{
          if(!loaded){
             throw invalid_argument("The graph is not loaded");
         }
         return weighted;
 
     }
-    bool isSameWeight(){
+  const  bool isSameWeight() const{
         if(!loaded){
             throw invalid_argument("The graph is not loaded");
         }
         return sameWeight;
     }
-    bool isLoaded(){
+   const bool isLoaded() const{
         return loaded;
     }
 
